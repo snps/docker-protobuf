@@ -1,4 +1,4 @@
-FROM debian:8
+FROM debian:9
 MAINTAINER Felix Glas <felix.glas@afconsult.com>
 
 ARG USER=proto
