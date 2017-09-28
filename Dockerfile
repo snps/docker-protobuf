@@ -1,34 +1,17 @@
-FROM debian:9
-MAINTAINER Felix Glas <felix.glas@afconsult.com>
+FROM alpine:3.6
+
+LABEL com.apple.author="Felix Glas"
 
 ARG USER=proto
 
-RUN apt-get update && apt-get install -y \
-    autoconf \
-    automake \
-    libtool \
-    curl \
-    make \
-    g++ \
-    unzip \
-    vim \
-    --no-install-recommends \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+RUN apk update && apk add \
+    bash \
+    protobuf
 
-RUN useradd -ms /bin/bash $USER
+RUN adduser -D $USER
+
+USER $USER
+
 WORKDIR /home/$USER
 
-RUN curl -L -k -O https://github.com/google/protobuf/releases/download/v3.4.1/protobuf-cpp-3.4.1.tar.gz \
-    && tar -zxvf protobuf-cpp-3.4.1.tar.gz
-
-RUN cd protobuf-3.4.1 \
-    && ./configure \
-    && make \
-    && make check \
-    && make install \
-    && ldconfig
-
-#USER $USER
-
-CMD /bin/bash
+ENTRYPOINT ["protoc"]
